@@ -1,5 +1,11 @@
 # Game Glitch Investigator: Applied AI System
 
+## Portfolio Reflection
+
+This project shows that I can take an existing system, identify where AI adds real value, and integrate it responsibly. I didn't just connect an API — I designed a fallback so the system never breaks, wrote reliability tests to prove the AI behaves consistently, and documented every decision clearly. As an AI engineer, I understand that building with AI means thinking about what happens when it fails, not just when it works.
+
+---
+
 ## Demo Walkthrough
 
 [Watch the Loom video walkthrough here](https://www.loom.com/share/3f4a0b238dd6429e8adf8a831bbda92f)
