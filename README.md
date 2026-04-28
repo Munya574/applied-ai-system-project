@@ -2,7 +2,7 @@
 
 ## Demo Walkthrough
 
-[Watch the Loom video walkthrough here](#) ← replace with your Loom link after recording
+[Watch the Loom video walkthrough here](https://www.loom.com/share/3f4a0b238dd6429e8adf8a831bbda92f)
 
 ---
 
