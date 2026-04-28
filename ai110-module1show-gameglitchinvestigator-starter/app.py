@@ -2,6 +2,7 @@ import random
 import streamlit as st
 # FIX: Refactored logic functions into logic_utils.py using Copilot Agent mode
 from logic_utils import get_range_for_difficulty, parse_guess, check_guess, update_score
+from ai_hint import get_ai_hint
 
 st.set_page_config(page_title="Glitchy Guesser", page_icon="🎮")
 
@@ -9,6 +10,8 @@ st.title("🎮 Game Glitch Investigator")
 st.caption("An AI-generated guessing game. Something is off.")
 
 st.sidebar.header("Settings")
+
+demo_mode = st.sidebar.checkbox("Enable AI Hints", value=True)
 
 difficulty = st.sidebar.selectbox(
     "Difficulty",
@@ -106,7 +109,38 @@ if submit:
         outcome, message = check_guess(guess_int, secret)
 
         if show_hint:
-            st.warning(message)
+            if demo_mode:
+                gap = abs(guess_int - secret)
+                range_size = high - low
+                closeness = gap / range_size
+
+                if closeness <= 0.05:
+                    proximity = "burning"
+                elif closeness <= 0.15:
+                    proximity = "close"
+                else:
+                    proximity = "far"
+
+                demo_hints = {
+                    ("Too High", "burning"): "🔥 So close! Just a tiny bit lower — you're almost there!",
+                    ("Too High", "close"):   "📉 Getting warmer! Go a bit lower, you're not far off.",
+                    ("Too High", "far"):     "⬇️ Too high! Aim quite a bit lower — you've got a ways to go.",
+                    ("Too Low",  "burning"): "🔥 Nearly there! Just nudge a little higher!",
+                    ("Too Low",  "close"):   "📈 You're in the ballpark! Try a bit higher.",
+                    ("Too Low",  "far"):     "⬆️ Too low! You need to go quite a bit higher.",
+                }
+                ai_message = demo_hints.get((outcome, proximity), message)
+                st.warning(f"🤖 {ai_message}")
+            else:
+                try:
+                    ai_message = get_ai_hint(
+                        guess_history=st.session_state.history,
+                        secret_range=(low, high),
+                        last_outcome=outcome,
+                    )
+                    st.warning(f"🤖 {ai_message}")
+                except Exception:
+                    st.warning(message)
 
         st.session_state.score = update_score(
             current_score=st.session_state.score,
